@@ -117,7 +117,23 @@ GROQ_API_KEY = "your_api_key"
 
 # 📸 Screenshots
 
-(Add screenshots here later)
+# 📸 Screenshots
+
+## 🏠 Home Page
+
+![Home](screenshots/home.png)
+
+---
+
+## 🤖 AI Medical Question Answering
+
+![Chat](screenshots/chat.png)
+
+---
+
+## 📄 PDF Upload Support
+
+![PDF Upload](screenshots/pdf_upload.png)
 
 ---
 
