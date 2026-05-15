@@ -3,9 +3,11 @@ import tempfile
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.memory import ConversationBufferMemory
 from langchain_community.vectorstores import FAISS
 from langchain_groq import ChatGroq
 from langchain.chains import RetrievalQA
+from langchain.chains import ConversationalRetrievalChain
 
 # -----------------------------------
 # PAGE CONFIG
@@ -125,7 +127,7 @@ if uploaded_file:
         )
 
         pdf_chunks = text_splitter.split_documents(docs)
-        
+
         if len(pdf_chunks) == 0:
 
             st.error("No readable text found in PDF.")
@@ -156,17 +158,25 @@ llm = ChatGroq(
     groq_api_key=st.secrets["GROQ_API_KEY"],
     model_name="llama-3.1-8b-instant"
 )
+# ------------------------------------
+# CREATE MEMORY
+# ------------------------------------
 
+memory = ConversationBufferMemory(
+    memory_key="chat_history",
+    return_messages=True,
+    output_key="answer"
+)
 # -----------------------------------
 # QA CHAIN
 # -----------------------------------
 
-qa_chain = RetrievalQA.from_chain_type(
+qa_chain = ConversationalRetrievalChain.from_llm(
     llm=llm,
     retriever=retriever,
+    memory=memory,
     return_source_documents=True
 )
-
 # -----------------------------------
 # DISPLAY CHAT HISTORY
 # -----------------------------------
@@ -205,9 +215,11 @@ if prompt:
 
         with st.spinner("Searching medical research papers..."):
 
-            response = qa_chain(prompt)
+            response = qa_chain.invoke(
+                {"question": prompt}
+            )
 
-            answer = response["result"]
+            answer = response["answer"]
 
             source_docs = response["source_documents"]
 

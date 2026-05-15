@@ -18,15 +18,20 @@ This application allows users to:
 
 # 📌 Features
 
+# 📌 Features
+
 ✅ Medical Question Answering  
 ✅ Retrieval-Augmented Generation (RAG)  
 ✅ FAISS Vector Database  
 ✅ HuggingFace Embeddings  
 ✅ Groq LLM Integration  
 ✅ PDF Upload Support  
+✅ OCR Support for Scanned PDFs  
+✅ Conversational Memory Support  
+✅ Context-Aware Follow-Up Questions  
+✅ Citation/Source Retrieval  
 ✅ Chat History  
-✅ Streamlit Web App UI  
-✅ OCR Support for Scanned PDFs
+✅ Streamlit Web App UI
 
 ---
 
@@ -144,10 +149,15 @@ GROQ_API_KEY = "your_api_key"
 
 ---
 
-
 ## 🔍 OCR Support for Scanned PDFs
 
 ![OCR Support](screenshots/ocr_support.png)
+
+---
+
+## 🧠 Conversational Memory
+
+![Conversational Memory](screenshots/memory_chat.png)
 
 ---
 # 🌟 Future Improvements
