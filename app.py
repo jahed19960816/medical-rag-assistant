@@ -125,6 +125,12 @@ if uploaded_file:
         )
 
         pdf_chunks = text_splitter.split_documents(docs)
+        
+        if len(pdf_chunks) == 0:
+
+            st.error("No readable text found in PDF.")
+
+            st.stop()
 
         # Create temporary vector DB
         vectorstore = FAISS.from_documents(

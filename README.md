@@ -26,6 +26,7 @@ This application allows users to:
 ✅ PDF Upload Support  
 ✅ Chat History  
 ✅ Streamlit Web App UI  
+✅ OCR Support for Scanned PDFs
 
 ---
 
@@ -143,9 +144,14 @@ GROQ_API_KEY = "your_api_key"
 
 ---
 
-# 🌟 Future Improvements
 
-- OCR support for scanned PDFs
+## 🔍 OCR Support for Scanned PDFs
+
+![OCR Support](screenshots/ocr_support.png)
+
+---
+# 🌟 Future Improvements
+ 
 - Multi-document RAG
 - Persistent vector database
 - Hybrid search
