@@ -20,6 +20,8 @@ This application allows users to:
 
 # 📌 Features
 
+# 📌 Features
+
 ✅ Medical Question Answering  
 ✅ Retrieval-Augmented Generation (RAG)  
 ✅ FAISS Vector Database  
@@ -27,11 +29,11 @@ This application allows users to:
 ✅ Groq LLM Integration  
 ✅ PDF Upload Support  
 ✅ OCR Support for Scanned PDFs  
-✅ Conversational Memory Support  
-✅ Context-Aware Follow-Up Questions  
 ✅ Citation/Source Retrieval  
-✅ Chat History  
-✅ Streamlit Web App UI
+✅ Conversational Memory  
+✅ Persistent Chat History  
+✅ Context-Aware Follow-Up Questions  
+✅ Streamlit Web Application
 
 ---
 
@@ -160,6 +162,14 @@ GROQ_API_KEY = "your_api_key"
 ![Conversational Memory](screenshots/memory_chat.png)
 
 ---
+
+---
+
+## 💾 Persistent Chat History
+
+![Persistent Chat](screenshots/persistent_memory.png)
+
+
 # 🌟 Future Improvements
  
 - Multi-document RAG

@@ -1,4 +1,6 @@
 import streamlit as st
+import json
+import os
 import tempfile
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.document_loaders import PyPDFLoader
@@ -8,6 +10,12 @@ from langchain_community.vectorstores import FAISS
 from langchain_groq import ChatGroq
 from langchain.chains import RetrievalQA
 from langchain.chains import ConversationalRetrievalChain
+
+#--------------------------
+#CREATE CHAT FILE VARIABLE
+#---------------------------
+
+CHAT_HISTORY_FILE = "chat_history.json"
 
 # -----------------------------------
 # PAGE CONFIG
@@ -70,7 +78,16 @@ st.caption("Ask questions from medical research papers using AI + RAG")
 # -----------------------------------
 
 if "messages" not in st.session_state:
-    st.session_state.messages = []
+
+    if os.path.exists(CHAT_HISTORY_FILE):
+
+        with open(CHAT_HISTORY_FILE, "r") as file:
+
+            st.session_state.messages = json.load(file)
+
+    else:
+
+        st.session_state.messages = []
 
 # -----------------------------------
 # LOAD EMBEDDINGS
@@ -199,9 +216,6 @@ prompt = st.chat_input("Ask your medical question...")
 
 if prompt:
 
-    # Show user message
-    st.chat_message("user").markdown(prompt)
-
     # Save user message
     st.session_state.messages.append(
         {
@@ -210,27 +224,46 @@ if prompt:
         }
     )
 
+    # Save user message to JSON
+    with open(CHAT_HISTORY_FILE, "w") as file:
+
+        json.dump(st.session_state.messages, file)
+
     # AI response
+    with st.spinner("Searching medical research papers..."):
+
+        response = qa_chain.invoke(
+            {"question": prompt}
+        )
+
+        answer = response["answer"]
+
+        source_docs = response["source_documents"]
+
+    # Save AI response
+    st.session_state.messages.append(
+        {
+            "role": "assistant",
+            "content": answer
+        }
+    )
+
+    # Save assistant response to JSON
+    with open(CHAT_HISTORY_FILE, "w") as file:
+
+        json.dump(st.session_state.messages, file)
+
+    # Show assistant response
     with st.chat_message("assistant"):
 
-        with st.spinner("Searching medical research papers..."):
+        st.markdown(answer)
 
-            response = qa_chain.invoke(
-                {"question": prompt}
-            )
+        # Sources
+        with st.expander("📚 Source Documents"):
 
-            answer = response["answer"]
+            for doc in source_docs:
 
-            source_docs = response["source_documents"]
-
-            st.markdown(answer)
-
-            # Sources
-            with st.expander("📚 Source Documents"):
-
-                for doc in source_docs:
-
-                    st.markdown(
+                st.markdown(
                     f"""
                     <div style="
                         padding:15px;
@@ -248,11 +281,8 @@ if prompt:
                     </div>
                     """,
                     unsafe_allow_html=True
-                    )
-    # Save AI response
-    st.session_state.messages.append(
-        {
-            "role": "assistant",
-            "content": answer
-        }
-    )
+                )
+
+    st.rerun()
+       
+
